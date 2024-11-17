@@ -1,18 +1,51 @@
-import { ApolloServer } from '@apollo/server';
-import { resolvers } from '../../../graphql/resolvers';
-import { typeDefs } from '../../../graphql/schema';
-import { contextFactory } from '@/lib/context';
-import { startServerAndCreateNextHandler } from "@as-integrations/next";
-import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
+import 'reflect-metadata';
+import 'ts-tiny-invariant';
+import { ApolloServer } from 'apollo-server-micro';
+import { buildSchema } from 'type-graphql';
+import { customTypes } from '@/graphql/custom/types';
+import { resolvers } from '@/prisma/generated/graphql/resolvers';
+import { types } from '@/prisma/generated/graphql/types';
+import { PrismaClient } from '@prisma/client';
+import prisma from '@/src/config/prisma';
+import Cors from 'micro-cors';
+import { customResolvers } from '@/graphql/custom/resolver';
+import { IncomingMessage, ServerResponse } from 'http';
 
-const server = new ApolloServer({
-    resolvers,
-    typeDefs,
-    csrfPrevention: true,
-    cache: "bounded",
-    plugins: [ApolloServerPluginLandingPageDisabled()]
+const cors = Cors({
+  allowMethods: ['POST', 'OPTIONS', 'GET', 'HEAD'],
 });
 
-export default startServerAndCreateNextHandler(server, {
-    context: async (req, res) => contextFactory(req),
+interface Context {
+  prisma: PrismaClient;
+}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+const functionHandler = async (req: IncomingMessage, res: ServerResponse<IncomingMessage>) => {
+  const apolloServer = new ApolloServer({
+    context: (): Context => ({ prisma }),
+    typeDefs: [...types, ...customTypes],
+    resolvers: [...resolvers, ...customResolvers],
+    persistedQueries: false, // This disables persisted queries
+    cache: 'bounded', // This sets up a bounded cache
+    introspection: process.env.NODE_ENV !== 'production',
+  });
+  const startServer = apolloServer.start();
+  await startServer;
+  return apolloServer.createHandler({
+    path: '/api/graphql',
+  })(req, res);
+};
+
+export default cors((req, res) => {
+  if (req.method === 'OPTIONS') {
+    res.end();
+    return false;
+  }
+
+  return functionHandler(req, res);
 });

@@ -1,0 +1,2 @@
+const customTypes = [];
+export { customTypes };
