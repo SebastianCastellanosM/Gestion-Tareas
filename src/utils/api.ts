@@ -24,8 +24,8 @@ const makePost = (url: string, body: string, options: object) => {
     const url = `https://gestiontareas.us.auth0.com/oauth/token`;
     const headers = { 'content-type': 'application/json' };
     const body = {
-      client_id: 'ueTJqppGgPqHRxXHflB4Kw8WKOHAfgTj',
-      client_secret: 'DEbQeFQb5PZYFa4F7jlgBVW8or6P6CE2rn2E2YrpjB7uHhshCr-fxP8lfUH8E6Zb',
+      client_id: '3zg5XaGOdz1uk7gHJNwQBeSf7RhtisEI',
+      client_secret: 'QplB3TP88P8Vw-JeEr0XbJC5G7xQ6fnHgFnar3TqhFcCJ2KrtrF1dVWhxgl-RKuL',
       audience: 'https://gestiontareas.us.auth0.com/api/v2/',
       grant_type: 'client_credentials',
     };

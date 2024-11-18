@@ -58,7 +58,7 @@
     "lucide-react": "^0.441.0",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
-    "nanoid": "^5.0.7",
+    "nanoid": "^5.0.8",
     "next": "14.2.11",
     "next-auth": "^4.24.7",
     "next-themes": "^0.3.0",
