@@ -32,35 +32,35 @@ const Index = () => {
               Dashboard
             </Link>
             <Link
-              href='/orders'
+              href='/proyectos'
               className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
             >
               <ShoppingCart className='h-4 w-4' />
-              Orders
+              Proyectos
               <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
                 6
               </Badge>
             </Link>
             <Link
-              href='/products'
+              href='/tareas'
               className='flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary'
             >
               <Package className='h-4 w-4' />
-              Products{' '}
+              Tareas{' '}
             </Link>
             <Link
-              href='/customers'
+              href='/reportes'
               className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
             >
               <Users className='h-4 w-4' />
-              Customers
+              Reportes
             </Link>
             <Link
               href='/users'
               className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
             >
               <LineChart className='h-4 w-4' />
-              Users
+              Usuarios
             </Link>
           </nav>
         </div>

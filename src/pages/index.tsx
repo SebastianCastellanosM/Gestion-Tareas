@@ -40,9 +40,7 @@ export default function Home({ users }: any) {
         <div
           className={`flex h-screen bg-white`}
         >
-    
           <Sidebar />
-          
         </div>
       )
   }
