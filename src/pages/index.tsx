@@ -4,7 +4,8 @@
 // import axios from 'axios';
 
 import Sidebar from "../components/molecules/Sidebar";
-
+import { useSession, signIn } from 'next-auth/react';
+import React from "react";
 
 
 /* export async function getServerSideProps() {
@@ -33,14 +34,47 @@ export default function Home({ users }: any) {
     ></div>
   );
 } */
-
-
-  export default function Home({ users }: any) {
+  
+  export default function Home() {
+    const { data: session, status } = useSession();
+   
+  
+    // Mostrar un mensaje de carga mientras se verifica la sesión
+    if (status === "loading") {
+      return <div className="flex h-screen justify-center items-center">Cargando...</div>;
+    }
+  
+    // Si no hay sesión, redirigir al usuario a la página de inicio de sesión
+    if (!session) {
       return (
-        <div
-          className={`flex h-screen bg-white`}
-        >
-          <Sidebar />
+        <div className="flex h-screen justify-center items-center">
+          <div>
+            <h1 className="text-2xl mb-4">Por favor, inicia sesión para acceder</h1>
+            <button
+              onClick={() => signIn('auth0')}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Iniciar Sesión
+            </button>
+          </div>
         </div>
-      )
+      );
+    }
+  
+    // Si hay una sesión, renderizar el contenido
+    return (
+      <div className="flex h-screen bg-white">
+        <div>
+          <Sidebar />
+        
+        </div>
+        <div className="flex-1 p-6">
+          <h1 className="text-2xl">Bienvenido, {session.user?.name || "Usuario"}</h1>
+
+
+          
+        </div>
+      </div>
+    );
   }
+  

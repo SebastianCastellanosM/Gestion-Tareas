@@ -6,9 +6,11 @@ import { Badge } from '@/src/components/ui/badge';
 import { Button } from '@/src/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/components/ui/card';
 import { useSession } from 'next-auth/react';
+import { Calendar } from '@/src/components/ui/calendar';
 
 const Index = () => {
   const { data: session } = useSession();
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
   return (
     <div className='hidden border-r bg-muted/40 md:block'>
       <div className='flex h-full max-h-screen flex-col gap-2'>
@@ -64,6 +66,12 @@ const Index = () => {
             </Link>
           </nav>
         </div>
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+             className="rounded-md border"
+             />
         <div className='mt-auto p-4'>
           <Card x-chunk='dashboard-02-chunk-0'>
             <CardHeader className='p-2 pt-0 md:p-4 flex flex-row gap-5 justify-center items-center'>
