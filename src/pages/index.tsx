@@ -3,10 +3,9 @@
 // import { useSession, signIn } from 'next-auth/react';
 // import axios from 'axios';
 
-import Sidebar from "../components/molecules/Sidebar";
 import { useSession, signIn } from 'next-auth/react';
 import React from "react";
-
+import Charts from '../components/organism/Dashboard';
 
 /* export async function getServerSideProps() {
   const prisma = new PrismaClient();
@@ -63,17 +62,8 @@ export default function Home({ users }: any) {
   
     // Si hay una sesión, renderizar el contenido
     return (
-      <div className="flex h-screen bg-white">
-        <div>
-          <Sidebar />
-        
-        </div>
-        <div className="flex-1 p-6">
-          <h1 className="text-2xl">Bienvenido, {session.user?.name || "Usuario"}</h1>
-
-
-          
-        </div>
+      <div >
+        <Charts />
       </div>
     );
   }

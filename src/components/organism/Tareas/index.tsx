@@ -17,7 +17,7 @@ import {
   TableRow,
 } from '@/src/components/ui/table';
 import { useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '@/src/utils/gql/queries/products';
+// import { GET_PRODUCTS } from '@/src/utils/gql/queries/products';
 import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
 import { Button } from '@/src/components/ui/button';
 
@@ -30,17 +30,18 @@ type Product = {
 };
 
 export default function Component() {
-  const [products, setProducts] = useState([]);
+/*  const [products, setProducts] = useState([]);
   useQuery(GET_PRODUCTS, {
     onCompleted: (data) => {
       setProducts(data.productss);
     },
   });
+  */
   return (
     <Card>
       <CardHeader className='px-7'>
         <div>
-          <CardTitle>Products</CardTitle>
+          <CardTitle>Tareas</CardTitle>
           <CardDescription>Table Products</CardDescription>
         </div>
         <Link href={`/products/new`}>
