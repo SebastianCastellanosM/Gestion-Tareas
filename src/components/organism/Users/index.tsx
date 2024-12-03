@@ -33,6 +33,7 @@ export default function Component() {
   useQuery(GET_ALL_USERS, {
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
+      console.log('Fetched users:', data.users);
       setUsers(data.users);
     },
   });

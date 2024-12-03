@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import { Bell, Home, LineChart, Package, Package2, ShoppingCart, Users } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
-import { Badge } from '@/src/components/ui/badge';
 import { Button } from '@/src/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/components/ui/card';
 import { useSession } from 'next-auth/react';

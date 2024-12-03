@@ -19,7 +19,7 @@ export default function Component() {
   return (
     <Card>
       <CardHeader className='px-7'>
-        <CardTitle>Proyects</CardTitle>
+        <CardTitle>Orders</CardTitle>
         <CardDescription>Recent orders from your store.</CardDescription>
       </CardHeader>
       <CardContent>
