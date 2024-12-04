@@ -8,8 +8,9 @@ import { useSession } from 'next-auth/react';
 import { Calendar } from '@/src/components/ui/calendar';
 
 const Index = () => {
-  const { data: session } = useSession();
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  const { data: session } = useSession(); // Obtener los datos de la sesión
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
+
   return (
     <div className='hidden border-r bg-muted/40 md:block'>
       <div className='flex h-full max-h-screen flex-col gap-2'>
@@ -53,21 +54,24 @@ const Index = () => {
               <Users className='h-4 w-4' />
               Reportes
             </Link>
-            <Link
-              href='/users'
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-            >
-              <LineChart className='h-4 w-4' />
-              Usuarios
-            </Link>
+            {/* Mostrar el enlace de Usuarios solo si el rol no es USER */}
+            {session?.user?.role !== 'USER' && (
+              <Link
+                href='/users'
+                className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+              >
+                <LineChart className='h-4 w-4' />
+                Usuarios
+              </Link>
+            )}
           </nav>
         </div>
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-             className="rounded-md border"
-             />
+        <Calendar
+          mode='single'
+          selected={date}
+          onSelect={setDate}
+          className='rounded-md border'
+        />
         <div className='mt-auto p-4'>
           <Card x-chunk='dashboard-02-chunk-0'>
             <CardHeader className='p-2 pt-0 md:p-4 flex flex-row gap-5 justify-center items-center'>
