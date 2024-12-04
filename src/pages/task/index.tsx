@@ -70,55 +70,86 @@ const TaskPage = ({ tasks, users, projects }: TaskPageProps) => {
   };
 
   return (
-    <div>
-      <h1>Task Management</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Title"
-          required
-        />
-        
-        <select
-          value={assigneeId}
-          onChange={(e) => setAssigneeId(e.target.value)}
-          required
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-semibold text-center mb-6">Task Management</h1>
+  
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title"
+            required
+            className="w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+  
+        <div>
+          <select
+            value={assigneeId}
+            onChange={(e) => setAssigneeId(e.target.value)}
+            required
+            className="w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="">Assign User</option>
+            {users.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.name}
+              </option>
+            ))}
+          </select>
+        </div>
+  
+        <div>
+          <select
+            value={projectId}
+            onChange={(e) => setProjectId(e.target.value)}
+            required
+            className="w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="">Assign Project</option>
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+        </div>
+  
+        <button
+          type="submit"
+          className="w-full py-3 mt-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
-          <option value="">Assign User</option>
-          {users.map((user) => (
-            <option key={user.id} value={user.id}>
-              {user.name}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={projectId}
-          onChange={(e) => setProjectId(e.target.value)}
-          required
-        >
-          <option value="">Assign Project</option>
-          {projects.map((project) => (
-            <option key={project.id} value={project.id}>
-              {project.name}
-            </option>
-          ))}
-        </select>
-
-        <button type="submit">{editingTask ? 'Edit Task' : 'Create Task'}</button>
+          {editingTask ? 'Edit Task' : 'Create Task'}
+        </button>
       </form>
-
-      <h2>Task List</h2>
-      <ul>
+  
+      <h2 className="text-2xl font-semibold mt-8 mb-4">Task List</h2>
+      <ul className="space-y-4">
         {tasks.map((task) => (
-          <li key={task.id}>
-            <h3>{task.title}</h3>
-            {task.assignee && <p>Assigned to: {task.assignee.name}</p>}
-            {task.project && <p>Project: {task.project.name}</p>}
-            <button onClick={() => handleEdit(task)}>Edit</button>
-            <button onClick={() => handleDelete(task.id)}>Delete</button>
+          <li key={task.id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <h3 className="text-xl font-semibold">{task.title}</h3>
+            {task.assignee && (
+              <p className="text-gray-600">Assigned to: <span className="font-medium">{task.assignee.name}</span></p>
+            )}
+            {task.project && (
+              <p className="text-gray-600">Project: <span className="font-medium">{task.project.name}</span></p>
+            )}
+            <div className="mt-4 flex space-x-4">
+              <button
+                onClick={() => handleEdit(task)}
+                className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(task.id)}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
+              >
+                Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
@@ -127,16 +158,56 @@ const TaskPage = ({ tasks, users, projects }: TaskPageProps) => {
 };
 
 export async function getServerSideProps() {
-  const tasks = await prisma.task.findMany({
+  const tasks = await prisma.tasks.findMany({
     include: {
       assignee: true,
-      project: true,
+      projectItems: {
+        include: {
+          project: true,  // Aquí accedemos al 'project' a través de 'projectItems'
+        },
+      },
     },
   });
+
+  // Convertir fechas en tasks a ISO strings
+  const serializedTasks = tasks.map(task => ({
+    ...task,
+    createdAt: task.createdAt.toISOString(),
+    updatedAt: task.updatedAt.toISOString(),
+    // Si tienes otros campos de tipo Date, haz lo mismo
+    projectItems: task.projectItems.map(projectItem => ({
+      ...projectItem,
+      createdAt: projectItem.createdAt.toISOString(),
+      updatedAt: projectItem.updatedAt.toISOString(),
+      project: projectItem.project ? {
+        ...projectItem.project,
+        createdAt: projectItem.project.createdAt.toISOString(),
+        updatedAt: projectItem.project.updatedAt.toISOString(),
+      } : null,
+    })),
+  }));
+
   const users = await prisma.user.findMany();
+  const serializedUsers = users.map(user => ({
+    ...user,
+    createdAt: user.createdAt.toISOString(),
+    updatedAt: user.updatedAt.toISOString(),
+  }));
+
   const projects = await prisma.project.findMany();
-  
-  return { props: { tasks, users, projects } };
+  const serializedProjects = projects.map(project => ({
+    ...project,
+    createdAt: project.createdAt.toISOString(),
+    updatedAt: project.updatedAt.toISOString(),
+  }));
+
+  return { 
+    props: { 
+      tasks: serializedTasks, 
+      users: serializedUsers, 
+      projects: serializedProjects 
+    } 
+  };
 }
 
 export default TaskPage;

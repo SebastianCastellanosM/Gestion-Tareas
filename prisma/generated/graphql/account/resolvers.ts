@@ -1,5 +1,5 @@
 
-    import prisma from 'config/prisma';
+    import prisma from '@/src/config/prisma';
 
     const AccountResolvers = {
     Account: {
@@ -47,7 +47,7 @@
         })
       },
     }
-    },
+    };
 
     export { AccountResolvers };
 

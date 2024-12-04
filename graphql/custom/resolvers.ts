@@ -1,3 +1,7 @@
-const customResolvers = [];
+import { UserCustomResolvers } from './users/resolvers';
 
-export {customResolvers};
+const customResolvers = [
+  UserCustomResolvers,
+];
+
+export { customResolvers };

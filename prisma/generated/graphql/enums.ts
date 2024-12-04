@@ -3,22 +3,12 @@
   
   const GQLEnums = gql`
     
-        enum Role {
+        enum Enum_RoleName {
   ADMIN
   USER
 }
-        input RoleInput{
-          set:Role
-        }
-        
-
-        enum TaskStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-}
-        input TaskStatusInput{
-          set:TaskStatus
+        input Enum_RoleNameInput{
+          set:Enum_RoleName
         }
         
   `

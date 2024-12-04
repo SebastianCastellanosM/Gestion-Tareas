@@ -3,7 +3,7 @@
 
   const ProjectTypes = gql`
   type Project{
-    id: ID!,name: String!,ownerId: Int!,owner: User!,tasks: [Task]
+    id: ID!,customer: Customer!,customerId: String!,total: Float!,createdAt: DateTime!,updatedAt: DateTime!,projectItems: [ProjectItem]
   }
 
   type Query{
@@ -12,7 +12,7 @@
   }
 
   input ProjectCreateInput{
-    name: String!,ownerId: Int!
+    customerId: String!,total: Float!
   }
 
   input ProjectWhereUniqueInput{
@@ -20,8 +20,8 @@
   }
 
   input ProjectUpdateInput{
-  name: StringInput
-ownerId: IntInput
+  customerId: StringInput
+total: FloatInput
   }
 
   type Mutation {

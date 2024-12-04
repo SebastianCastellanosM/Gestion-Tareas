@@ -1,6 +1,6 @@
 
     import { gql } from 'apollo-server-micro';
-    import { SessionTypes } from './session/types';import { AccountTypes } from './account/types';import { ProjectTypes } from './project/types';import { TaskTypes } from './task/types';import { UserTypes } from './user/types';import { VerificationTokenTypes } from './verificationtoken/types'
+    import { AccountTypes } from './account/types';import { SessionTypes } from './session/types';import { UserTypes } from './users/types';import { CustomerTypes } from './customer/types';import { ProjectTypes } from './project/types';import { ProjectItemTypes } from './projectitem/types';import { TasksTypes } from './tasks/types';import { VerificationTokenTypes } from './verificationtoken/types'
     
     ;
 
@@ -30,6 +30,6 @@
     }
     `;
 
-    export const types = [genericTypes,  SessionTypes, AccountTypes, ProjectTypes, TaskTypes, UserTypes, VerificationTokenTypes];
+    export const types = [genericTypes,  AccountTypes, SessionTypes, UserTypes, CustomerTypes, ProjectTypes, ProjectItemTypes, TasksTypes, VerificationTokenTypes];
 
   

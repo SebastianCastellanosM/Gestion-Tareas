@@ -46,6 +46,7 @@ model User {
   image         String?
   accounts      Account[]     @relation(name: "AccountToUser")
   sessions      Session[]     @relation(name: "SessionToUser")
+  tasks         Tasks[]       @relation("AssigneeTasks") // Relación inversa con Tasks
   deleted       Boolean       @default(false)
   enabled       Boolean       @default(true)
   createdAt     DateTime      @default(now())
@@ -90,7 +91,9 @@ model Tasks {
   description String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  projectItems  ProjectItem[]
+  assigneeId  String?     // ID del usuario asignado
+  assignee    User?       @relation("AssigneeTasks", fields: [assigneeId], references: [id])  // Relación con User
+  projectItems ProjectItem[]
 }
 
 model VerificationToken {

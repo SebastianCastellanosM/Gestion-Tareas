@@ -1,18 +1,18 @@
 
-    import prisma from 'config/prisma';
+    import prisma from '@/src/config/prisma';
 
     const ProjectResolvers = {
     Project: {
         
-                owner: async (parent:any, _:any) => {
-                return await prisma.user.findUnique({
+                customer: async (parent:any, _:any) => {
+                return await prisma.customer.findUnique({
                     where: {
-                    id: parent.ownerId,
+                    id: parent.customerId,
                     },
                 });
                 }
-                ,tasks: async (parent:any, _:any) => {
-                  return await prisma.task.findMany({
+                ,projectItems: async (parent:any, _:any) => {
+                  return await prisma.projectItem.findMany({
                   where: {
                       project: {
                         is: {
@@ -59,7 +59,7 @@
         })
       },
     }
-    },
+    };
 
     export { ProjectResolvers };
 

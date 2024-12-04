@@ -3,7 +3,7 @@
 
   const AccountTypes = gql`
   type Account{
-    id: ID!,provider: String!,providerAccountId: String!,userId: Int!,user: User!
+    userId: String!,type: String!,provider: String!,providerAccountId: String!,refresh_token: String,access_token: String,expires_at: Int,token_type: String,scope: String,id_token: String,session_state: String,user: User!
   }
 
   type Query{
@@ -12,7 +12,7 @@
   }
 
   input AccountCreateInput{
-    provider: String!,providerAccountId: String!,userId: Int!
+    userId: String!,type: String!,provider: String!,providerAccountId: String!,refresh_token: String,access_token: String,expires_at: Int,token_type: String,scope: String,id_token: String,session_state: String
   }
 
   input AccountWhereUniqueInput{
@@ -20,9 +20,17 @@
   }
 
   input AccountUpdateInput{
-  provider: StringInput
+  userId: StringInput
+type: StringInput
+provider: StringInput
 providerAccountId: StringInput
-userId: IntInput
+refresh_token: StringInput
+access_token: StringInput
+expires_at: IntInput
+token_type: StringInput
+scope: StringInput
+id_token: StringInput
+session_state: StringInput
   }
 
   type Mutation {
