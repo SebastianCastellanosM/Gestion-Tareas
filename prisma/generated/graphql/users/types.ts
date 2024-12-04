@@ -3,7 +3,7 @@
 
   const UserTypes = gql`
   type User{
-    id: ID!,name: String,email: String,emailVerified: DateTime,image: String,accounts: [Account],sessions: [Session]
+    id: ID!,name: String,role: Enum_RoleName!,email: String,emailVerified: DateTime,image: String,accounts: [Account],sessions: [Session],tasks: [Tasks],deleted: Boolean!,enabled: Boolean!,createdAt: DateTime!,updatedAt: DateTime!
   }
 
   type Query{
@@ -12,7 +12,7 @@
   }
 
   input UserCreateInput{
-    name: String,email: String,emailVerified: DateTime,image: String
+    name: String,role: Enum_RoleName!,email: String,emailVerified: DateTime,image: String,deleted: Boolean!,enabled: Boolean!
   }
 
   input UserWhereUniqueInput{
@@ -21,9 +21,12 @@
 
   input UserUpdateInput{
   name: StringInput
+role: Enum_RoleNameInput
 email: StringInput
 emailVerified: DateTimeInput
 image: StringInput
+deleted: BooleanInput
+enabled: BooleanInput
   }
 
   type Mutation {

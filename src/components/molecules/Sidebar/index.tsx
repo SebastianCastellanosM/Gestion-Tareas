@@ -34,25 +34,18 @@ const Index = () => {
               Dashboard
             </Link>
             <Link
-              href='/proyectos'
+              href='/project'
               className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
             >
               <ShoppingCart className='h-4 w-4' />
               Proyectos
             </Link>
             <Link
-              href='/tareas'
+              href='/task'
               className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
             >
               <Package className='h-4 w-4' />
               Tareas{' '}
-            </Link>
-            <Link
-              href='/reportes'
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-            >
-              <Users className='h-4 w-4' />
-              Reportes
             </Link>
             {/* Mostrar el enlace de Usuarios solo si el rol no es USER */}
             {session?.user?.role !== 'USER' && (

@@ -27,6 +27,18 @@
                       },
                     },
                   })
+                },tasks: async (parent:any, _:any) => {
+                  return await prisma.tasks.findMany({
+                  where: {
+                      assignee: {
+                        is: {
+                          id: {
+                            equals: parent.id,
+                          },
+                        },
+                      },
+                    },
+                  })
                 }
     },
     Query: {

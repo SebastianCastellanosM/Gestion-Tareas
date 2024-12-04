@@ -1,3 +1,0 @@
-const customResolvers = [];
-
-export {customResolvers};
