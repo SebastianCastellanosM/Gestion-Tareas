@@ -1,5 +1,5 @@
 
-    import prisma from '@/src/config/prisma';
+    import prisma from 'config/prisma';
 
     const VerificationTokenResolvers = {
     VerificationToken: {
@@ -39,7 +39,7 @@
         })
       },
     }
-    };
+    },
 
     export { VerificationTokenResolvers };
 

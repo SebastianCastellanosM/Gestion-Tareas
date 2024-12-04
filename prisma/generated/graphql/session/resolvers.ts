@@ -1,5 +1,5 @@
 
-    import prisma from '@/src/config/prisma';
+    import prisma from 'config/prisma';
 
     const SessionResolvers = {
     Session: {
@@ -28,7 +28,7 @@
     Mutation:{
       createSession:async (_:any, args:any)=>{
         return await prisma.session.create({
-          data:{...args.data, expires: new Date(args.data.expires).toISOString() }
+          data:{...args.data, expiresAt: new Date(args.data.expiresAt).toISOString() }
         })
       },
       updateSession:async (_:any, args:any)=>{
@@ -36,7 +36,7 @@
           where:{
             id:args.where.id
           },
-          data:{...args.data, ...(args.data.expires && {expires: new Date(args.data.expires).toISOString()})}
+          data:{...args.data, ...(args.data.expiresAt && {expiresAt: new Date(args.data.expiresAt).toISOString()})}
         })
       },
       deleteSession:async (_:any, args:any)=>{
@@ -47,7 +47,7 @@
         })
       },
     }
-    };
+    },
 
     export { SessionResolvers };
 

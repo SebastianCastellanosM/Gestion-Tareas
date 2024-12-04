@@ -7,7 +7,7 @@ import { Label } from '@/src/components/ui/label';
 import Dropdown from '@/src/components/organism/DropDown/index';
 import Switch from '@/src/components/molecules/Switch/Index';
 import UploadImage from '@/src/components/molecules/UploadImage/Index';
-import useFormData from '@/src/hooks/useFormData';
+import useFormData from '@/src/hooks/useFromData';
 import { Button } from '@/src/components/ui/button';
 
 const Role = [

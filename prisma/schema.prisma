@@ -13,23 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Enum_TaskStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-}
-
-enum Enum_ReportStatus {
-  OPEN
-  RESOLVED
-  CLOSED
-}
-
-enum Enum_RoleName {
-  ADMIN
-  USER
-}
-
 model Account {
   userId            String  @map("user_id")
   type              String
@@ -67,52 +50,48 @@ model User {
   enabled       Boolean       @default(true)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  tasks         Task[]        // Relación con tareas asignadas
-  reports       Report[]      @relation("ReportToUser")
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  document  String
+  name      String
+  email     String
+  phone     String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projects    Project[]
 }
 
 model Project {
-  id          String   @id @default(cuid())
+  id         String      @id @default(cuid())
+  customer   Customer    @relation(fields: [customerId], references: [id])
+  customerId String
+  total      Float
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  projectItems ProjectItem[]
+}
+
+model ProjectItem {
+  id         String   @id @default(cuid())
+  project      Project  @relation(fields: [projectId], references: [id])  // Cambio aquí
+  projectId    String
+  task    Tasks @relation(fields: [taskId], references: [id])
+  taskId  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Tasks {
+  id          String      @id @default(cuid())
   name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  tasks       Task[]   // Relación con las tareas
-  reports     Report[] @relation("ProjectReports") // Relación con Report
+  description String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  projectItems  ProjectItem[]
 }
-
-
-model Task {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  status      Enum_TaskStatus @default(PENDING)
-  dueDate     DateTime?
-  project     Project  @relation(fields: [projectId], references: [id])
-  projectId   String
-  assignedTo  User?    @relation(fields: [userId], references: [id])
-  userId      String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  reports     Report[] @relation("TaskReports")  // Relación con Report
-}
-
-
-model Report {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  createdBy   User     @relation(fields: [createdById], references: [id], name: "ReportToUser")
-  createdById String
-  relatedTask Task?    @relation("TaskReports", fields: [taskId], references: [id])
-  taskId      String?
-  relatedProject Project? @relation("ProjectReports", fields: [projectId], references: [id])
-  projectId   String?
-  status      Enum_ReportStatus @default(OPEN)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 
 model VerificationToken {
   identifier String
@@ -120,4 +99,9 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+enum Enum_RoleName {
+  ADMIN
+  USER
 }

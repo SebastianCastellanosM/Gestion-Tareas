@@ -3,7 +3,7 @@
 
   const UserTypes = gql`
   type User{
-    id: ID!,name: String,email: String,emailVerified: DateTime,image: String,accounts: [Account],sessions: [Session]
+    id: ID!,email: String!,password: String!,sessions: [Session],accounts: [Account],projectsAsOwner: [Project],tasksAsAssignee: [Task]
   }
 
   type Query{
@@ -12,7 +12,7 @@
   }
 
   input UserCreateInput{
-    name: String,email: String,emailVerified: DateTime,image: String
+    email: String!,password: String!
   }
 
   input UserWhereUniqueInput{
@@ -20,10 +20,8 @@
   }
 
   input UserUpdateInput{
-  name: StringInput
-email: StringInput
-emailVerified: DateTimeInput
-image: StringInput
+  email: StringInput
+password: StringInput
   }
 
   type Mutation {

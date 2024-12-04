@@ -3,7 +3,7 @@
 
   const SessionTypes = gql`
   type Session{
-    sessionToken: String!,userId: String!,expires: DateTime!,user: User!
+    id: ID!,userId: Int!,expiresAt: DateTime!,user: User!
   }
 
   type Query{
@@ -12,7 +12,7 @@
   }
 
   input SessionCreateInput{
-    sessionToken: String!,userId: String!,expires: DateTime!
+    userId: Int!,expiresAt: DateTime!
   }
 
   input SessionWhereUniqueInput{
@@ -20,9 +20,8 @@
   }
 
   input SessionUpdateInput{
-  sessionToken: StringInput
-userId: StringInput
-expires: DateTimeInput
+  userId: IntInput
+expiresAt: DateTimeInput
   }
 
   type Mutation {

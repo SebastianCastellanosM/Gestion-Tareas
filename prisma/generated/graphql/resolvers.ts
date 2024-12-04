@@ -1,10 +1,11 @@
 
-      import { AccountResolvers } from './account/resolvers';
-import { SessionResolvers } from './session/resolvers';
+      import { SessionResolvers } from './session/resolvers';
+import { AccountResolvers } from './account/resolvers';
+import { ProjectResolvers } from './project/resolvers';
+import { TaskResolvers } from './task/resolvers';
 import { UserResolvers } from './user/resolvers';
-import { ProductsResolvers } from './products/resolvers';
 import { VerificationTokenResolvers } from './verificationtoken/resolvers';
   
-      export const resolvers = [AccountResolvers, SessionResolvers, UserResolvers, ProductsResolvers, VerificationTokenResolvers];
+      export const resolvers = [SessionResolvers, AccountResolvers, ProjectResolvers, TaskResolvers, UserResolvers, VerificationTokenResolvers];
   
       

@@ -8,7 +8,7 @@ import { types } from '@/prisma/generated/graphql/types';
 import { PrismaClient } from '@prisma/client';
 import prisma from '@/src/config/prisma';
 import Cors from 'micro-cors';
-import { customResolvers } from '@/graphql/custom/resolver';
+import { customResolvers } from '@/graphql/custom/resolvers';
 import { IncomingMessage, ServerResponse } from 'http';
 
 const cors = Cors({

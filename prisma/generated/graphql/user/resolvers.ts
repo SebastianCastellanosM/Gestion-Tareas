@@ -1,9 +1,21 @@
 
-    import prisma from '@/src/config/prisma';
+    import prisma from 'config/prisma';
 
     const UserResolvers = {
     User: {
-        accounts: async (parent:any, _:any) => {
+        sessions: async (parent:any, _:any) => {
+                  return await prisma.session.findMany({
+                  where: {
+                      user: {
+                        is: {
+                          id: {
+                            equals: parent.id,
+                          },
+                        },
+                      },
+                    },
+                  })
+                },accounts: async (parent:any, _:any) => {
                   return await prisma.account.findMany({
                   where: {
                       user: {
@@ -15,10 +27,22 @@
                       },
                     },
                   })
-                },sessions: async (parent:any, _:any) => {
-                  return await prisma.session.findMany({
+                },projectsAsOwner: async (parent:any, _:any) => {
+                  return await prisma.project.findMany({
                   where: {
-                      user: {
+                      owner: {
+                        is: {
+                          id: {
+                            equals: parent.id,
+                          },
+                        },
+                      },
+                    },
+                  })
+                },tasksAsAssignee: async (parent:any, _:any) => {
+                  return await prisma.task.findMany({
+                  where: {
+                      assignee: {
                         is: {
                           id: {
                             equals: parent.id,
@@ -44,7 +68,7 @@
     Mutation:{
       createUser:async (_:any, args:any)=>{
         return await prisma.user.create({
-          data:{...args.data, emailVerified: new Date(args.data.emailVerified).toISOString() }
+          data:{...args.data,  }
         })
       },
       updateUser:async (_:any, args:any)=>{
@@ -52,7 +76,7 @@
           where:{
             id:args.where.id
           },
-          data:{...args.data, ...(args.data.emailVerified && {emailVerified: new Date(args.data.emailVerified).toISOString()})}
+          data:{...args.data, }
         })
       },
       deleteUser:async (_:any, args:any)=>{
@@ -63,7 +87,7 @@
         })
       },
     }
-    };
+    },
 
     export { UserResolvers };
 
