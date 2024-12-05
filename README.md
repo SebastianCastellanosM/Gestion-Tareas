@@ -9,31 +9,36 @@ El proyecto se construye utilizando tecnologías modernas como Next.js para el f
 ## Funcionalidades Principales
 
 ###Gestión de Usuarios
-Administradores pueden crear, editar y eliminar usuarios.
-Usuarios pueden actualizar sus perfiles, pero no pueden gestionar otros usuarios.
+
+- Administradores pueden crear, editar y eliminar usuarios.
+- Usuarios pueden actualizar sus perfiles, pero no pueden gestionar otros usuarios.
 
 ###Gestión de Proyectos
-Administradores pueden crear, editar y eliminar proyectos.
-Usuarios pueden ver los proyectos a los que están asignados y seguir el progreso de las tareas.
+
+- Administradores pueden crear, editar y eliminar proyectos.
+- Usuarios pueden ver los proyectos a los que están asignados y seguir el progreso de las tareas.
 
 ###Gestión de Tareas
-Administradores pueden asignar tareas a usuarios, establecer fechas de vencimiento y marcar tareas como completadas.
-Usuarios pueden ver las tareas asignadas, marcarlas como completadas y agregar comentarios.
+
+- Administradores pueden asignar tareas a usuarios, establecer fechas de vencimiento y marcar tareas como completadas.
+- Usuarios pueden ver las tareas asignadas, marcarlas como completadas y agregar comentarios.
 
 ###Autenticación de Usuarios
-Implementación de inicio de sesión y autenticación con NextAuth.js.
-Los roles de usuario se asignan al momento de la creación de la cuenta (Administrador o Usuario Regular).
+
+- Implementación de inicio de sesión y autenticación con NextAuth.js.
+- Los roles de usuario se asignan al momento de la creación de la cuenta (Administrador o Usuario Regular).
 
 ###Interfaz de Usuario
-Diseño limpio y funcional utilizando React y TailwindCSS.
-Dashboard para visualizar proyectos, tareas y usuarios de manera rápida y eficiente.
+
+- Diseño limpio y funcional utilizando React y TailwindCSS.
+- Dashboard para visualizar proyectos, tareas y usuarios de manera rápida y eficiente.
 
 ###API GraphQL
-Uso de GraphQL para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en los proyectos, usuarios y tareas.
-Apollo Server gestionando las consultas y mutaciones de GraphQL.
+- Uso de GraphQL para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en los proyectos, usuarios y tareas.
+- Apollo Server gestionando las consultas y mutaciones de GraphQL.
 
 ###Seguridad
-Roles diferenciados para Administradores y Usuarios, asegurando que solo los administradores puedan realizar ciertas acciones como la gestión de usuarios y proyectos.
+- Roles diferenciados para Administradores y Usuarios, asegurando que solo los administradores puedan realizar ciertas acciones como la gestión de usuarios y proyectos.
 
 
 # Tecnologías Usadas
