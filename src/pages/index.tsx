@@ -5,7 +5,6 @@
 
 import { useSession, signIn } from 'next-auth/react';
 import React from "react";
-import Charts from '../components/organism/Dashboard';
 import Dashboard from '../components/organism/Dashboard';
 
 /* export async function getServerSideProps() {
