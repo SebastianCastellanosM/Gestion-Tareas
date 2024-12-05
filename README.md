@@ -68,9 +68,9 @@ El proyecto se construye utilizando tecnologías modernas como Next.js para el f
 # Usuarios
 ### Usuario ADMIN
 Email: admin@gmail.com
-Password: admin123
+Password: Admin123*
 
 ### Usuario USER
 Email: user@gmail.com
-Password: user123
+Password: User123*
 
