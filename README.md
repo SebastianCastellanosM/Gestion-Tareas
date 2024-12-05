@@ -37,22 +37,26 @@ Roles diferenciados para Administradores y Usuarios, asegurando que solo los adm
 
 
 # Tecnologías Usadas
+
 ##Backend
-Node.js: Entorno de ejecución para el servidor.
-Next.js: Framework para React, utilizado para construir la aplicación de servidor y cliente.
-Apollo Server: Para la implementación de GraphQL, gestionando consultas y mutaciones en la base de datos.
-GraphQL: Lenguaje de consulta para la API, utilizado para realizar operaciones CRUD sobre proyectos, usuarios y tareas.
-Prisma: ORM para interactuar con la base de datos y gestionar modelos de datos.
-Supabase: Base de datos backend y servicios de autenticación para usuarios.
+
+- Node.js: Entorno de ejecución para el servidor.
+- Next.js: Framework para React, utilizado para construir la aplicación de servidor y cliente.
+- Apollo Server: Para la implementación de GraphQL, gestionando consultas y mutaciones en la base de datos.
+- GraphQL: Lenguaje de consulta para la API, utilizado para realizar operaciones CRUD sobre proyectos, usuarios y tareas.
+- Prisma: ORM para interactuar con la base de datos y gestionar modelos de datos.
+- Supabase: Base de datos backend y servicios de autenticación para usuarios.
 
 ##Frontend
-React: Biblioteca de JavaScript para construir interfaces de usuario dinámicas.
-TailwindCSS: Framework de CSS para diseñar interfaces de usuario con un enfoque en la productividad y diseño responsivo.
-NextAuth.js: Librería para la autenticación de usuarios, con soporte para roles como ADMIN y USER.
+
+- React: Biblioteca de JavaScript para construir interfaces de usuario dinámicas.
+- TailwindCSS: Framework de CSS para diseñar interfaces de usuario con un enfoque en la productividad y diseño responsivo.
+- NextAuth.js: Librería para la autenticación de usuarios, con soporte para roles como ADMIN y USER.
 
 ##Otras herramientas
-GitHub: Control de versiones y colaboración en el proyecto.
-Vercel: Plataforma para el despliegue continuo de la aplicación web.
+
+- GitHub: Control de versiones y colaboración en el proyecto.
+- Vercel: Plataforma para el despliegue continuo de la aplicación web.
 
 
 
