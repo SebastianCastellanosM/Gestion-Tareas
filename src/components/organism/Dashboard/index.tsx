@@ -1,5 +1,4 @@
 'use client';
-import Charts from '@/src/components/organism/Charts';
 
 const Dashboard = () => {
   return (
