@@ -1,35 +1,53 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import prisma from '@/src/lib/prisma'
+import { NextApiRequest, NextApiResponse } from 'next';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query
+  const { id } = req.query;
 
-  if (req.method === 'PUT') {
-    const { name, ownerId } = req.body
-
-    try {
-      const updatedProject = await prisma.project.update({
-        where: { id: Number(id) },
-        data: {
-          name,
-          ownerId,
-        },
-      })
-      return res.status(200).json(updatedProject)
-    } catch (error) {
-      return res.status(500).json({ error: 'Error actualizando el proyecto' })
-    }
-  } else if (req.method === 'DELETE') {
-    try {
-      const deletedProject = await prisma.project.delete({
-        where: { id: Number(id) },
-      })
-      return res.status(200).json(deletedProject)
-    } catch (error) {
-      return res.status(500).json({ error: 'Error eliminando el proyecto' })
-    }
-  } else {
-    return res.status(405).json({ error: 'Método no permitido' })
+  if (!id) {
+    return res.status(400).json({ error: 'ID del proyecto es requerido' });
   }
-} 
 
+  if (req.method === 'GET') {
+    // Obtener un solo proyecto
+    const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
+
+    if (error) {
+      return res.status(404).json({ error: 'Proyecto no encontrado' });
+    }
+
+    return res.status(200).json(data);
+  } 
+  
+  else if (req.method === 'PUT') {
+    // Actualizar un proyecto
+    const { name, ownerId } = req.body;
+
+    const { data, error } = await supabase.from('projects').update({ name, owner_id: ownerId }).eq('id', id);
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    return res.status(200).json(data);
+  } 
+  
+  else if (req.method === 'DELETE') {
+    // Eliminar un proyecto
+    const { error } = await supabase.from('projects').delete().eq('id', id);
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    return res.status(200).json({ message: 'Proyecto eliminado' });
+  }
+
+  res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
+  res.status(405).end(`Método ${req.method} no permitido`);
+}

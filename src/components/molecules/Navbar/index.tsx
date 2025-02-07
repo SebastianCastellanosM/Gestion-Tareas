@@ -9,7 +9,6 @@ import {
   Users,
 } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
-import { Badge } from '@/src/components/ui/badge';
 import { Button } from '@/src/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/components/ui/card';
 import {
@@ -24,9 +23,11 @@ import { Input } from '@/src/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/src/components/ui/sheet';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+import { useState } from 'react';
 
 const Index = () => {
   const { data: session } = useSession();
+  const [searchTerm, setSearchTerm] = useState('');  // Estado de busqueda
   return (
     <header className='flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6'>
       <Sheet>

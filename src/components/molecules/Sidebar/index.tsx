@@ -59,12 +59,6 @@ const Index = () => {
             )}
           </nav>
         </div>
-        <Calendar
-          mode='single'
-          selected={date}
-          onSelect={setDate}
-          className='rounded-md border'
-        />
         <div className='mt-auto p-4'>
           <Card x-chunk='dashboard-02-chunk-0'>
             <CardHeader className='p-2 pt-0 md:p-4 flex flex-row gap-5 justify-center items-center'>
