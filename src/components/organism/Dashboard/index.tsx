@@ -1,69 +1,72 @@
 'use client';
 
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 const Dashboard = () => {
+  const [tasksData, setTasksData] = useState({
+    completed: 0,
+    pending: 0,
+    inProgress: 0,
+    recentTasks: [],
+  });
+
+  // Función para obtener los datos de tareas desde la API
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get("https://localhost:3000/tasks");
+      setTasksData({
+        completed: response.data.completed,
+        pending: response.data.pending,
+        inProgress: response.data.inProgress,
+        recentTasks: response.data.recentTasks,
+      });
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks(); // Carga los datos al montar el componente
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Título del Dashboard */}
         <header className="text-3xl font-semibold text-gray-800">Dashboard de Gestión de Tareas</header>
 
-        {/* Sección de estadísticas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Card para tareas completadas */}
           <div className="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
             <div>
               <h3 className="text-xl font-medium text-gray-700">Tareas Completadas</h3>
-              <p className="text-3xl font-semibold text-blue-600">120</p>
+              <p className="text-3xl font-semibold text-blue-600">{tasksData.completed}</p>
             </div>
             <div className="text-blue-600 text-6xl">✔️</div>
           </div>
 
-          {/* Card para tareas pendientes */}
           <div className="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
             <div>
               <h3 className="text-xl font-medium text-gray-700">Tareas Pendientes</h3>
-              <p className="text-3xl font-semibold text-red-600">45</p>
+              <p className="text-3xl font-semibold text-red-600">{tasksData.pending}</p>
             </div>
             <div className="text-red-600 text-6xl">❗</div>
           </div>
 
-          {/* Card para tareas en progreso */}
           <div className="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
             <div>
               <h3 className="text-xl font-medium text-gray-700">Tareas en Progreso</h3>
-              <p className="text-3xl font-semibold text-yellow-600">38</p>
+              <p className="text-3xl font-semibold text-yellow-600">{tasksData.inProgress}</p>
             </div>
             <div className="text-yellow-600 text-6xl">🔄</div>
           </div>
         </div>
 
-        {/* Sección de gráficos */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Gráficos de Tareas</h2>
-          
-        </div>
-
-        {/* Sección adicional de tareas o usuarios */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Tareas Recientes</h2>
-          <div className="space-y-4">
-            {/* Aquí puedes agregar una tabla o una lista de tareas */}
-            <ul className="space-y-2">
-              <li className="flex justify-between items-center">
-                <span>Tarea 1</span>
-                <span className="text-gray-500">Pendiente</span>
-              </li>
-              <li className="flex justify-between items-center">
-                <span>Tarea 2</span>
-                <span className="text-green-500">Completada</span>
-              </li>
-              <li className="flex justify-between items-center">
-                <span>Tarea 3</span>
-                <span className="text-yellow-600">En progreso</span>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <button
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={fetchTasks} // Botón de prueba para actualizar
+        >
+          Actualizar Dashboard
+        </button>
       </div>
     </div>
   );

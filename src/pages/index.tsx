@@ -6,33 +6,6 @@
 import { useSession, signIn } from 'next-auth/react';
 import React from "react";
 import Dashboard from '../components/organism/Dashboard';
-
-/* export async function getServerSideProps() {
-  const prisma = new PrismaClient();
-  const users = await prisma.user.findMany();
-  return {
-    props: {
-      users: safeJsonStringify(users),
-    },
-  };
-}
-
-export default function Home({ users }: any) {
-  const { data: session } = useSession();
-  console.log('session', session, users);
-  const getProducts = async () => {
-    await axios.get('https://fakestoreapi.com/products').then((res: any) => {
-      console.log('res', res);
-    });
-  };
-  getProducts();
-
-  return (
-    <div
-      className={`grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    ></div>
-  );
-} */
   
   export default function Home() {
     const { data: session, status } = useSession();
@@ -59,12 +32,12 @@ export default function Home({ users }: any) {
         </div>
       );
     }
-  
+      
     // Si hay una sesión, renderizar el contenido
-    return (
+     return (
       <div >
         <Dashboard />
       </div>
-    );
+   );
   }
   
