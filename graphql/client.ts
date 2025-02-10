@@ -1,5 +1,8 @@
 import { ApolloClient, InMemoryCache, from, HttpLink } from '@apollo/client';
 
+// Definimos la URL de la API en las variables de entorno.
+const GRAPHQL_URL = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3000/api/graphql';
+
 declare global {
   var apolloGlobal: ApolloClient<object>;
 }
@@ -9,12 +12,11 @@ let client: ApolloClient<object>;
 if (process.env.NODE_ENV === 'production') {
   client = new ApolloClient({
     cache: new InMemoryCache({
-      addTypename: false,
+      addTypename: false, 
     }),
     link: from([
       new HttpLink({
-        // eslint-disable-next-line no-nested-ternary
-        uri: 'http://localhost:3000/api/graphql',
+        uri: GRAPHQL_URL, 
       }),
     ]),
     connectToDevTools: true,
@@ -25,7 +27,7 @@ if (process.env.NODE_ENV === 'production') {
       cache: new InMemoryCache(),
       link: from([
         new HttpLink({
-          uri: 'http://localhost:3000/api/graphql',
+          uri: GRAPHQL_URL, 
         }),
       ]),
       connectToDevTools: true,
@@ -33,4 +35,5 @@ if (process.env.NODE_ENV === 'production') {
   }
   client = global.apolloGlobal;
 }
+
 export { client };

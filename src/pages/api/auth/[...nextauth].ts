@@ -7,7 +7,8 @@ import prisma from '@/src/config/prisma';
 const options: NextAuthOptions = {
   callbacks: {
     async session({ session, user }: any) {
-      const newSession = (await prisma.session.findFirst({
+      console.log("Session callback:", session, user); // Para depurar
+      const newSession = await prisma.session.findFirst({
         where: {
           userId: user.id,
         },
@@ -17,7 +18,8 @@ const options: NextAuthOptions = {
         orderBy: {
           expires: 'desc',
         },
-      })) as any;
+      }) as any;
+
       return {
         ...session,
         user: newSession?.user,
@@ -27,11 +29,9 @@ const options: NextAuthOptions = {
   },
   providers: [
     Auth0Provider({
-      wellKnown: `https://${process.env.AUTH0_DOMAIN}/`,
-      issuer: process.env.AUTH0_DOMAIN,
-      authorization: `https://${process.env.AUTH0_DOMAIN}/authorize?response_type=code&prompt=login`,
-      clientId: `${process.env.AUTH0_CLIENT_ID}`,
-      clientSecret: `${process.env.AUTH0_CLIENT_SECRET}`,
+      clientId: process.env.AUTH0_CLIENT_ID!,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET!,
+      issuer: `https://${process.env.AUTH0_DOMAIN}`,
     }),
   ],
   secret: process.env.AUTH0_CLIENT_SECRET,

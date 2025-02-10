@@ -54,7 +54,7 @@
     "dataloader": "^2.2.2",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.3.0",
-    "graphql": "^16.9.0",
+    "graphql": "^16.10.0",
     "graphql-fields": "^2.0.3",
     "graphql-scalars": "^1.23.0",
     "input-otp": "^1.2.4",

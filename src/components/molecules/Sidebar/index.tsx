@@ -5,11 +5,9 @@ import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
 import { Button } from '@/src/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/components/ui/card';
 import { useSession } from 'next-auth/react';
-import { Calendar } from '@/src/components/ui/calendar';
 
 const Index = () => {
   const { data: session } = useSession(); // Obtener los datos de la sesión
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
 
   return (
     <div className='hidden border-r bg-muted/40 md:block'>
@@ -34,7 +32,7 @@ const Index = () => {
               Dashboard
             </Link>
             <Link
-              href='/project'
+              href='/projects'
               className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
             >
               <ShoppingCart className='h-4 w-4' />

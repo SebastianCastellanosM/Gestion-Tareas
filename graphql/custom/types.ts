@@ -1,6 +1,9 @@
-import { CustomUserTypes } from './users/types';
+import { userTypes } from './users/types';
+import { projectTypes } from './projects/types';
+import { taskTypes } from './tasks/types'; 
 
-const customTypes = [
-  CustomUserTypes,
-];
-export { customTypes };
+export const customTypes = `
+  ${userTypes}
+  ${projectTypes}
+  ${taskTypes}  
+`;

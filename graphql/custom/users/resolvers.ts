@@ -1,38 +1,34 @@
-import prisma from '@/src/config/prisma';
+// graphql/custom/users/resolvers.ts
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
-const UserCustomResolvers = {
-  User: {},
+export const userResolvers = {
   Query: {
-    userCustomSecure: async (_: any, args: any) => {
-      const user = await prisma.user.findFirst({
-        where: {
-          sessions: {
-            some: {
-              sessionToken: args.token,
-            },
-          },
-        },
-        select: {
-          role: true,
-          id: true,
-        },
+    getUser: async (_: any, { id }: { id: string }) => {
+      return prisma.user.findUnique({
+        where: { id },
       });
-      if (!user) {
-        throw new Error('forbidden user not found');
-      }
-      if (user.role !== 'ADMIN') {
-        throw new Error('forbidden user not admin');
-      }
-      return await prisma.user.findMany();
+    },
+    getUsers: async () => {
+      return prisma.user.findMany();
     },
   },
   Mutation: {
-    createUserCustom: async (_: any, args: any) => {
-      return await prisma.user.create({
-        data: args.data,
+    createUser: async (_: any, { name, email }: { name: string; email: string }) => {
+      return prisma.user.create({
+        data: { name, email },
+      });
+    },
+    updateUser: async (_: any, { id, name, email }: { id: string; name: string; email: string }) => {
+      return prisma.user.update({
+        where: { id },
+        data: { name, email },
+      });
+    },
+    deleteUser: async (_: any, { id }: { id: string }) => {
+      return prisma.user.delete({
+        where: { id },
       });
     },
   },
 };
-
-export { UserCustomResolvers };

@@ -1,7 +1,9 @@
-import { UserCustomResolvers } from './users/resolvers';
+import { userResolvers } from './users/resolvers';
+import { projectResolvers } from './projects/resolvers';
+import { taskResolvers } from './tasks/resolvers'; 
 
-const customResolvers = [
-  UserCustomResolvers,
-];
-
-export { customResolvers };
+export const customResolvers = {
+  ...userResolvers,
+  ...projectResolvers,
+  ...taskResolvers, 
+};

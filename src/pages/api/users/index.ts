@@ -1,27 +1,44 @@
-import { getSession } from 'next-auth/react';
-import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/src/lib/prisma'; // Asegúrate de tener tu prisma correctamente configurado
+import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "@/src/config/prisma";
+import { getServerSession } from "next-auth";
+import { options } from "../auth/[...nextauth]";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Obtener la sesión del usuario autenticado
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, options);
 
-  // Verificar si la sesión existe
-  if (!session) {
-    return res.status(401).json({ error: 'Not authenticated' });
+  if (!session || session.user.role !== "ADMIN") {
+    return res.status(403).json({ message: "Acceso denegado" });
   }
 
-  // Verificar si el usuario tiene el rol adecuado (por ejemplo, 'ADMIN')
-  if (session.user.role !== 'ADMIN') {
-    return res.status(403).json({ error: 'Forbidden, not an admin' });
+  if (req.method === "GET") {
+    try {
+      const users = await prisma.user.findMany({
+        select: { id: true, email: true, name: true, role: true, createdAt: true },
+        orderBy: { createdAt: "desc" },
+      });
+      return res.status(200).json(users);
+    } catch (error) {
+      return res.status(500).json({ message: "Error al obtener usuarios" });
+    }
   }
 
-  // Si todo está bien, proceder con la consulta o lo que sea necesario
-  try {
-    const users = await prisma.user.findMany();
-    res.status(200).json(users); // Devuelve los usuarios
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Error fetching users' });
+  if (req.method === "POST") {
+    try {
+      const { email, name, role } = req.body;
+
+      if (!email || !role) {
+        return res.status(400).json({ message: "Faltan datos obligatorios" });
+      }
+
+      const newUser = await prisma.user.create({
+        data: { email, name, role },
+      });
+
+      return res.status(201).json(newUser);
+    } catch (error) {
+      return res.status(500).json({ message: "Error al crear usuario" });
+    }
   }
+
+  return res.status(405).json({ message: "Método no permitido" });
 }
