@@ -3,8 +3,8 @@ import { gql } from 'apollo-server-micro';
 
 export const projectTypes = gql`
   type Project {
-    id: String
-    title: String
+    id: ID!
+    name: String
     description: String
     createdAt: DateTime
     updatedAt: DateTime
@@ -16,8 +16,8 @@ export const projectTypes = gql`
   }
 
   extend type Mutation {
-    createProject(title: String!, description: String!): Project
-    updateProject(id: String!, title: String, description: String): Project
+    createProject(name: String!, description: String!): Project
+    updateProject(id: String!, name: String, description: String): Project
     deleteProject(id: String!): Project
   }
 `;

@@ -1,64 +1,60 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { ApolloServer, gql } from "apollo-server-micro";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    switch (req.method) {
-      case "GET":
-        return await getProjects(res);
-
-      case "POST":
-        return await createProject(req, res);
-
-      case "PATCH":
-        return await updateProject(req, res);
-
-      case "DELETE":
-        return await deleteProject(req, res);
-
-      default:
-        return res.status(405).json({ message: "Método no permitido" });
-    }
-  } catch (error) {
-    console.error("Error en la API:", error);
-    return res.status(500).json({ error: "Error interno del servidor" });
+const typeDefs = gql`
+  type Project {
+    id: ID!
+    name: String!
+    description: String!
   }
-}
+  type Query {
+    getProjects: [Project]
+  }
+  type Mutation {
+    createProject(name: String!, description: String!): Project
+    deleteProject(id: ID!): Boolean
+    updateProject(id: ID!, name: String!, description: String!): Project
+  }
+`;
 
-const getProjects = async (res: NextApiResponse) => {
-  const { data, error } = await supabase.from("Project").select("*");
-  if (error) return res.status(500).json({ error: error.message });
-  return res.status(200).json(data);
+const resolvers = {
+  Query: {
+    getProjects: async () => {
+      const { data, error } = await supabase.from("projects").select("*");
+      if (error) throw new Error(error.message);
+      return data;
+    },
+  },
+  Mutation: {
+    createProject: async (_: any, { name, description }: any) => {
+      const { data, error } = await supabase
+        .from("projects")
+        .insert([{ name, description }])
+        .select()
+        .single();
+      if (error) throw new Error(error.message);
+      return data;
+    },
+    deleteProject: async (_: any, { id }: any) => {
+      const { error } = await supabase.from("projects").delete().eq("id", id);
+      if (error) throw new Error(error.message);
+      return true;
+    },
+    updateProject: async (_: any, { id, name, description }: any) => {
+      const { data, error } = await supabase
+        .from("projects")
+        .update({ name, description })
+        .eq("id", id)
+        .select()
+        .single();
+      if (error) throw new Error(error.message);
+      return data;
+    },
+  },
 };
 
-const createProject = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { name, description } = req.body;
-  if (!name) return res.status(400).json({ error: "El nombre es obligatorio" });
+const server = new ApolloServer({ typeDefs, resolvers });
 
-  const { data, error } = await supabase.from("Project").insert([{ name, description }]).select().single();
-  if (error) return res.status(500).json({ error: error.message });
-
-  return res.status(201).json(data);
-};
-
-const updateProject = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id, name, description } = req.body;
-  if (!id || !name) return res.status(400).json({ error: "ID y nombre son obligatorios" });
-
-  const { data, error } = await supabase.from("Project").update({ name, description }).eq("id", id).select().single();
-  if (error) return res.status(500).json({ error: error.message });
-
-  return res.status(200).json(data);
-};
-
-const deleteProject = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.body;
-  if (!id) return res.status(400).json({ error: "El ID es obligatorio" });
-
-  const { error } = await supabase.from("Project").delete().eq("id", id);
-  if (error) return res.status(500).json({ error: error.message });
-
-  return res.status(200).json({ message: "Proyecto eliminado" });
-};
+export default server.createHandler({ path: "/api/graphql" });

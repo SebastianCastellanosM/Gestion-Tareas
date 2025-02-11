@@ -1,27 +1,34 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const CREATE_PROJECT = gql`
-  mutation CreateProject($data: ProjectCreateInput!) {
-    createProject(data: $data) {
+  mutation CreateProject($name: String!, $description: String) {
+    createProject(name: $name, description: $description) {
       id
       name
       description
+      createdAt
     }
   }
 `;
-export const UPDATE_PROJECT = gql`
-  mutation UpdateProject($projectId: String!, $data: ProjectUpdateInput!) {
-    updateProject(where: { id: $projectId }, data: $data) {
-      id
-      name
-      description
-    }
-  }
-`;
+
 export const DELETE_PROJECT = gql`
-  mutation DeleteProject($projectId: String!) {
-    deleteProject(where: { id: $projectId }) {
+  mutation DeleteProject($id: ID!) {
+    deleteProject(id: $id) {
       id
+      name
+      description
+      createdAt
+    }
+  }
+`;
+
+export const GET_PROJECTS = gql`
+  query GetProjects {
+    projects {
+      id
+      name
+      description
+      createdAt
     }
   }
 `;

@@ -14,15 +14,15 @@ export const projectResolvers = {
     },
   },
   Mutation: {
-    createProject: async (_: any, { title, description }: { title: string, description: string }) => {
+    createProject: async (_: any, { name, description }: { name: string, description: string }) => {
       return prisma.project.create({
-        data: { title, description },
+        data: { name, description },
       });
     },
-    updateProject: async (_: any, { id, title, description }: { id: string, title: string, description: string }) => {
+    updateProject: async (_: any, { id, name, description }: { id: string, name: string, description: string }) => {
       return prisma.project.update({
         where: { id },
-        data: { title, description },
+        data: { name, description },
       });
     },
     deleteProject: async (_: any, { id }: { id: string }) => {
