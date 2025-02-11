@@ -29,14 +29,23 @@ type User = {
 };
 
 export default function Component() {
-  const [users, setUsers] = React.useState([]);
-  useQuery(GET_ALL_USERS, {
+  const [users, setUsers] = React.useState<User[]>([]);
+  const { loading, error } = useQuery(GET_ALL_USERS, {
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       console.log('Fetched users:', data.users);
       setUsers(data.users);
     },
   });
+
+  if (loading) {
+    return <div>Loading users...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading users: {error.message}</div>;
+  }
+
   return (
     <Card>
       <CardHeader className='px-7 flex flex-row justify-between items-center'>
@@ -45,7 +54,7 @@ export default function Component() {
           <CardDescription>Recent orders from your store.</CardDescription>
         </div>
         <Link href={`/users/new`}>
-          <Button> Add User</Button>
+          <Button>Add User</Button>
         </Link>
       </CardHeader>
       <CardContent>
@@ -64,7 +73,7 @@ export default function Component() {
               <TableRow key={user.id} className='bg-accent'>
                 <TableCell>
                   <Avatar>
-                    <AvatarImage src={user.image} alt='@shadcn' />
+                    <AvatarImage src={user.image} alt={user.name} />
                   </Avatar>
                 </TableCell>
                 <TableCell className='hidden sm:table-cell'>
@@ -78,13 +87,18 @@ export default function Component() {
                 </TableCell>
                 <TableCell className='text-right'>
                   <Link href={`/users/${user.id}`}>
-                    <Badge className='text-xs' variant='default'>
+                    <Button variant='default' size='sm' className='text-xs'>
                       Edit
-                    </Badge>
+                    </Button>
                   </Link>
-                  <Badge className='text-xs' variant='destructive'>
+                  <Button
+                    variant='destructive'
+                    size='sm'
+                    className='ml-2 text-xs'
+                    onClick={() => console.log(`Deleting user ${user.id}`)} // Implement delete logic here
+                  >
                     Delete
-                  </Badge>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

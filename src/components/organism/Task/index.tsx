@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge } from '@/src/components/ui/badge';
 import Link from 'next/link';
 import {
@@ -16,10 +16,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/src/components/ui/table';
-import { useQuery } from '@apollo/client';
-// import { GET_PRODUCTS } from '@/src/utils/gql/queries/products';
+import { useQuery, useMutation } from '@apollo/client';
+// import { GET_PRODUCTS } from '@/src/utils/gql/queries/products'; 
 import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
 import { Button } from '@/src/components/ui/button';
+// import { DELETE_PRODUCT } from '@/src/utils/gql/mutations/products';
 
 type Product = {
   id: string;
@@ -30,13 +31,38 @@ type Product = {
 };
 
 export default function Component() {
-/*  const [products, setProducts] = useState([]);
-  useQuery(GET_PRODUCTS, {
-    onCompleted: (data) => {
-      setProducts(data.productss);
-    },
-  });
-  */
+  const [products, setProducts] = useState<Product[]>([]);
+
+  // Simulación de consulta de productos
+  // Reemplaza esto con la consulta real usando Apollo Client.
+  useEffect(() => {
+    const fetchedProducts: Product[] = [
+      {
+        id: '1',
+        name: 'Product 1',
+        description: 'Description of product 1',
+        image: '/path/to/image1.jpg',
+        price: 100,
+      },
+      {
+        id: '2',
+        name: 'Product 2',
+        description: 'Description of product 2',
+        image: '/path/to/image2.jpg',
+        price: 200,
+      },
+      // Agrega más productos aquí...
+    ];
+    setProducts(fetchedProducts);
+  }, []);
+
+  // Función para eliminar un producto
+  const handleDelete = (productId: string) => {
+    // Lógica para eliminar el producto (ejemplo con Apollo Client)
+    console.log(`Eliminar producto con ID: ${productId}`);
+    setProducts(products.filter((product) => product.id !== productId));
+  };
+
   return (
     <Card>
       <CardHeader className='px-7'>
@@ -45,7 +71,7 @@ export default function Component() {
           <CardDescription>Table Products</CardDescription>
         </div>
         <Link href={`/products/new`}>
-          <Button> Add Product</Button>
+          <Button>Add Product</Button>
         </Link>
       </CardHeader>
       <CardContent>
@@ -60,7 +86,7 @@ export default function Component() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product: Product) => (
+            {products.map((product) => (
               <TableRow key={product.id} className='bg-accent'>
                 <TableCell>
                   <Avatar>
@@ -71,7 +97,6 @@ export default function Component() {
                   <div className='font-medium'>{product.name}</div>
                 </TableCell>
                 <TableCell className='hidden sm:table-cell'>{product.description}</TableCell>
-
                 <TableCell className='text-right'>${product.price}</TableCell>
                 <TableCell className='text-right'>
                   <Link href={`/products/${product.id}`}>
@@ -79,9 +104,14 @@ export default function Component() {
                       Edit
                     </Badge>
                   </Link>
-                  <Badge className='text-xs' variant='destructive'>
+                  <Button
+                    onClick={() => handleDelete(product.id)}
+                    className='ml-2'
+                    variant='destructive'
+                    size='sm'
+                  >
                     Delete
-                  </Badge>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

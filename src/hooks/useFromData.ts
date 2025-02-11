@@ -1,22 +1,21 @@
 import { useRef, useState } from 'react';
 
-interface FormDataObject {
-  [key: string]: string | { [key: string]: string };
-}
+const useFormData = initial => {
+  const form = useRef(initial);
 
-const useFormData = <T extends FormDataObject>(initial: T) => {
-  const form = useRef<HTMLFormElement | null>(null);
-  const [formData, setFormData] = useState<T>(initial);
+  const [formData, setFormData] = useState({} as any);
 
-  const getFormData = (): T => {
-    const fd = new FormData(form.current!);
-    const obj: FormDataObject = {};
+  const getFormData: any = () => {
+    const fd = new FormData(form.current);
 
+    const obj = {};
     fd.forEach((value, key) => {
       const str = key.split(':');
+
       if (str.length > 1) {
         obj[str[0]] = {
           ...obj[str[0]],
+
           [str[1]]: value,
         };
       } else {
@@ -24,14 +23,14 @@ const useFormData = <T extends FormDataObject>(initial: T) => {
       }
     });
 
-    return obj as T;
+    return obj;
   };
 
   const updateFormData = () => {
     setFormData(getFormData());
   };
 
-  return { form, formData, updateFormData };
+  return { form, formData, updateFormData } as const;
 };
 
 export default useFormData;

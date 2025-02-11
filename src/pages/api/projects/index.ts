@@ -1,70 +1,64 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
-import { getSession } from "next-auth/react";
+import { createClient } from "@supabase/supabase-js";
 
-const prisma = new PrismaClient();
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({ req });
+  try {
+    switch (req.method) {
+      case "GET":
+        return await getProjects(res);
 
-  if (!session) {
-    return res.status(401).json({ message: "No autorizado" });
-  }
+      case "POST":
+        return await createProject(req, res);
 
-  switch (req.method) {
-    case "GET":
-      try {
-        const projects = await prisma.project.findMany();
-        return res.status(200).json(projects);
-      } catch (error) {
-        return res.status(500).json({ error: "Error al obtener los proyectos" });
-      }
+      case "PATCH":
+        return await updateProject(req, res);
 
-    case "POST":
-      if (session.user.role !== "ADMIN") {
-        return res.status(403).json({ message: "No tienes permisos para crear proyectos" });
-      }
+      case "DELETE":
+        return await deleteProject(req, res);
 
-      try {
-        const { name, description } = req.body;
-        const newProject = await prisma.project.create({
-          data: { name, description },
-        });
-        return res.status(201).json(newProject);
-      } catch (error) {
-        return res.status(500).json({ error: "Error al crear el proyecto" });
-      }
-
-    case "PATCH":
-      if (session.user.role !== "ADMIN") {
-        return res.status(403).json({ message: "No tienes permisos para editar proyectos" });
-      }
-
-      try {
-        const { id, name, description } = req.body;
-        const updatedProject = await prisma.project.update({
-          where: { id },
-          data: { name, description },
-        });
-        return res.status(200).json(updatedProject);
-      } catch (error) {
-        return res.status(500).json({ error: "Error al actualizar el proyecto" });
-      }
-
-    case "DELETE":
-      if (session.user.role !== "ADMIN") {
-        return res.status(403).json({ message: "No tienes permisos para eliminar proyectos" });
-      }
-
-      try {
-        const { id } = req.body;
-        await prisma.project.delete({ where: { id } });
-        return res.status(200).json({ message: "Proyecto eliminado" });
-      } catch (error) {
-        return res.status(500).json({ error: "Error al eliminar el proyecto" });
-      }
-
-    default:
-      return res.status(405).json({ message: "Método no permitido" });
+      default:
+        return res.status(405).json({ message: "Método no permitido" });
+    }
+  } catch (error) {
+    console.error("Error en la API:", error);
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
 }
+
+const getProjects = async (res: NextApiResponse) => {
+  const { data, error } = await supabase.from("Project").select("*");
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json(data);
+};
+
+const createProject = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { name, description } = req.body;
+  if (!name) return res.status(400).json({ error: "El nombre es obligatorio" });
+
+  const { data, error } = await supabase.from("Project").insert([{ name, description }]).select().single();
+  if (error) return res.status(500).json({ error: error.message });
+
+  return res.status(201).json(data);
+};
+
+const updateProject = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id, name, description } = req.body;
+  if (!id || !name) return res.status(400).json({ error: "ID y nombre son obligatorios" });
+
+  const { data, error } = await supabase.from("Project").update({ name, description }).eq("id", id).select().single();
+  if (error) return res.status(500).json({ error: error.message });
+
+  return res.status(200).json(data);
+};
+
+const deleteProject = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id } = req.body;
+  if (!id) return res.status(400).json({ error: "El ID es obligatorio" });
+
+  const { error } = await supabase.from("Project").delete().eq("id", id);
+  if (error) return res.status(500).json({ error: error.message });
+
+  return res.status(200).json({ message: "Proyecto eliminado" });
+};
