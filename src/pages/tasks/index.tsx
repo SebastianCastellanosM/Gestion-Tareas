@@ -63,7 +63,7 @@ const Tasks = ({ session }) => {
       <h1 className="text-2xl font-bold">Tareas</h1>
 
       {/* Crear Tarea (Solo para ADMIN) */}
-      {session.user.role === "ADMIN" && (
+     
         <div className="mt-4">
           <input
             type="text"
@@ -83,8 +83,7 @@ const Tasks = ({ session }) => {
             Crear Tarea
           </button>
         </div>
-      )}
-
+      
       {/* Modal de edición */}
       {taskToEdit && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
