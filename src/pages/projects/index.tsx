@@ -73,79 +73,95 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Proyectos</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Nombre del proyecto"
-          className="border p-2 mr-2"
-          value={newProject.name}
-          onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Descripción"
-          className="border p-2 mr-2"
-          value={newProject.description}
-          onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-        />
-        <button
-          className="bg-blue-500 text-white p-2"
-          onClick={handleCreateProject}
-          disabled={loading}
-        >
-          {loading ? 'Creando...' : 'Crear Proyecto'}
-        </button>
-      </div>
-      {editingProject && (
-        <div className="mb-4">
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 p-8">
+      <div className="max-w-5xl mx-auto space-y-8">
+
+        {/* Título y Error */}
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">Proyectos</h1>
+        {error && <p className="text-red-500">{error}</p>}
+
+        {/* Formulario de creación de proyecto */}
+        <div className="bg-white p-6 rounded-lg shadow-md mb-6 flex flex-col sm:flex-row sm:items-center">
           <input
             type="text"
             placeholder="Nombre del proyecto"
-            className="border p-2 mr-2"
-            value={editingProject.name}
-            onChange={(e) => setEditingProject({ ...editingProject, name: e.target.value })}
+            className="border p-3 mb-4 sm:mb-0 sm:mr-4 rounded-lg flex-1"
+            value={newProject.name}
+            onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
           />
           <input
             type="text"
             placeholder="Descripción"
-            className="border p-2 mr-2"
-            value={editingProject.description}
-            onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
+            className="border p-3 mb-4 sm:mb-0 sm:mr-4 rounded-lg flex-1"
+            value={newProject.description}
+            onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
           />
           <button
-            className="bg-green-500 text-white p-2"
-            onClick={handleUpdateProject}
+            className="bg-blue-600 text-white p-3 rounded-lg w-full sm:w-auto mt-4 sm:mt-0"
+            onClick={handleCreateProject}
             disabled={loading}
           >
-            {loading ? 'Actualizando...' : 'Actualizar Proyecto'}
+            {loading ? 'Creando...' : 'Crear Proyecto'}
           </button>
         </div>
-      )}
-      {loading && <p>Cargando proyectos...</p>}
-      <ul>
-        {projects.map((project) => (
-          <li key={project.id} className="border p-2 my-2">
-            <h2 className="font-bold">{project.name}</h2>
-            <p>{project.description}</p>
+
+        {/* Edición de proyecto */}
+        {editingProject && (
+          <div className="bg-white p-6 rounded-lg shadow-md mb-6 flex flex-col sm:flex-row sm:items-center">
+            <input
+              type="text"
+              placeholder="Nombre del proyecto"
+              className="border p-3 mb-4 sm:mb-0 sm:mr-4 rounded-lg flex-1"
+              value={editingProject.name}
+              onChange={(e) => setEditingProject({ ...editingProject, name: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Descripción"
+              className="border p-3 mb-4 sm:mb-0 sm:mr-4 rounded-lg flex-1"
+              value={editingProject.description}
+              onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
+            />
             <button
-              className="bg-yellow-500 text-white p-2 mr-2"
-              onClick={() => setEditingProject(project)}
-            >
-              Editar
-            </button>
-            <button
-              className="bg-red-500 text-white p-2"
-              onClick={() => handleDeleteProject(project.id)}
+              className="bg-green-600 text-white p-3 rounded-lg w-full sm:w-auto mt-4 sm:mt-0"
+              onClick={handleUpdateProject}
               disabled={loading}
             >
-              {loading ? 'Eliminando...' : 'Eliminar'}
+              {loading ? 'Actualizando...' : 'Actualizar Proyecto'}
             </button>
-          </li>
-        ))}
-      </ul>
+          </div>
+        )}
+
+        {/* Cargando proyectos */}
+        {loading && <p className="text-gray-500">Cargando proyectos...</p>}
+
+        {/* Lista de proyectos */}
+        <ul>
+          {projects.map((project) => (
+            <li key={project.id} className="bg-white p-6 mb-4 rounded-lg shadow-md flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">{project.name}</h2>
+                <p className="text-gray-600">{project.description}</p>
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  className="bg-yellow-500 text-white p-3 rounded-lg"
+                  onClick={() => setEditingProject(project)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="bg-red-500 text-white p-3 rounded-lg"
+                  onClick={() => handleDeleteProject(project.id)}
+                  disabled={loading}
+                >
+                  {loading ? 'Eliminando...' : 'Eliminar'}
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

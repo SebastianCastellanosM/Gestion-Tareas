@@ -63,6 +63,7 @@ model Task {
   title       String
   description String?
   completed   Boolean  @default(false)
+  inProgress  Boolean  @default(false)
   userId      String?
   user        User?    @relation(fields: [userId], references: [id])
   projectId   String?

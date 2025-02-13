@@ -4,13 +4,17 @@ import {
   Menu,
   Package,
   Package2,
-  Search,
   ShoppingCart,
   Users,
-} from 'lucide-react';
-import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
-import { Button } from '@/src/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/src/components/ui/card';
+} from "lucide-react";
+import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
+import { Button } from "@/src/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,76 +22,59 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/src/components/ui/dropdown-menu';
-import { Input } from '@/src/components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@/src/components/ui/sheet';
-import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
-import { useState } from 'react';
+} from "@/src/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/src/components/ui/sheet";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { useState } from "react";
+
+
 
 const Index = () => {
   const { data: session } = useSession();
-  const [searchTerm, setSearchTerm] = useState('');  // Estado de busqueda
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredTasks, setFilteredTasks] = useState<any[]>([]); // 🛠 Evita error de `never[]`
+
+
   return (
-    <header className='flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6'>
+    <header className="flex h-16 items-center gap-6 px-4 lg:h-[70px] lg:px-6 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 shadow-lg">
+      {/* Menú móvil */}
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant='outline' size='icon' className='shrink-0 md:hidden'>
-            <Menu className='h-5 w-5' />
-            <span className='sr-only'>Toggle navigation menu</span>
+          <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+            <Menu className="h-6 w-6" />
+            <span className="sr-only">Toggle navigation menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side='left' className='flex flex-col'>
-          <nav className='grid gap-2 text-lg font-medium'>
-            <Link href='#' className='flex items-center gap-2 text-lg font-semibold'>
-              <Package2 className='h-6 w-6' />
-              <span className='sr-only'>Acme Inc</span>
+        <SheetContent side="left" className="flex flex-col p-4 bg-white shadow-xl w-64">
+          <nav className="grid gap-6 text-lg font-medium">
+            <Link href="/" className="flex items-center gap-4 text-gray-800 hover:text-blue-600">
+              <Package2 className="h-7 w-7" />
+              <span>Dashboard</span>
             </Link>
-            <Link
-              href='#'
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-            >
-              <Home className='h-5 w-5' />
-              Dashboard
+            <Link href="/projects" className="flex items-center gap-4 text-gray-800 hover:text-blue-600">
+              <ShoppingCart className="h-7 w-7" />
+              <span>Proyectos</span>
             </Link>
-            <Link
-              href='#'
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground'
-            >
-              <ShoppingCart className='h-5 w-5' />
-              Orders
+            <Link href="/tasks" className="flex items-center gap-4 text-gray-800 hover:text-blue-600">
+              <Package className="h-7 w-7" />
+              <span>Tareas</span>
             </Link>
-            <Link
-              href='#'
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-            >
-              <Package className='h-5 w-5' />
-              Products
-            </Link>
-            <Link
-              href='#'
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-            >
-              <Users className='h-5 w-5' />
-              Customers
-            </Link>
-            <Link
-              href='#'
-              className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground'
-            >
-              <LineChart className='h-5 w-5' />
-              Analytics
+            <Link href="/users" className="flex items-center gap-4 text-gray-800 hover:text-blue-600">
+              <Users className="h-7 w-7" />
+              <span>Usuarios</span>
             </Link>
           </nav>
-          <div className='mt-auto'>
-            <Card>
-              <CardHeader className='p-2 pt-0 md:p-4 flex flex-row gap-5 justify-center items-center'>
+
+          <div className="mt-auto">
+            <Card className="bg-white shadow-md rounded-xl">
+              <CardHeader className="p-4 flex gap-5 justify-center items-center">
                 <Avatar>
-                  <AvatarImage src={session?.user?.image} alt='@shadcn' />
+                  <AvatarImage src={session?.user?.image} alt="User Avatar" />
                 </Avatar>
-                <div className='flex flex-col items-center justify-center'>
+                <div className="flex flex-col items-center">
                   <CardTitle>{session?.user?.name}</CardTitle>
-                  <CardContent className='p-2 pt-0 md:p-4 md:pt-0'>
+                  <CardContent className="p-2 text-sm text-gray-600">
                     {session?.user?.role}
                   </CardContent>
                 </div>
@@ -96,33 +83,23 @@ const Index = () => {
           </div>
         </SheetContent>
       </Sheet>
-      <div className='w-full flex-1'>
-        <form>
-          <div className='relative'>
-            <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
-            <Input
-              type='search'
-              placeholder='Search tasks...'
-              className='w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3'
-            />
-          </div>
-        </form>
-      </div>
+
+      {/* Avatar de usuario y dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='secondary' size='icon' className='rounded-full'>
+          <Button variant="secondary" size="icon" className="rounded-full ml-auto">
             <Avatar>
-              <AvatarImage src={session?.user?.image} alt='@shadcn' />
+              <AvatarImage src={session?.user?.image} alt="User Avatar" />
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem>Configuraciones</DropdownMenuItem>
+          <DropdownMenuItem>Soporte</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => signOut()}>Cerrar sesión</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

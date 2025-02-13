@@ -3,76 +3,80 @@ import Link from 'next/link';
 import { Bell, Home, LineChart, Package, Package2, ShoppingCart, Users } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/src/components/ui/avatar';
 import { Button } from '@/src/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/src/components/ui/card';
 import { useSession } from 'next-auth/react';
 
-const Index = () => {
+const Sidebar = () => {
   const { data: session } = useSession(); // Obtener los datos de la sesión
 
   return (
-    <div className='hidden border-r bg-muted/40 md:block'>
-      <div className='flex h-full max-h-screen flex-col gap-2'>
-        <div className='flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6'>
-          <Link href='/' className='flex items-center gap-2 font-semibold'>
-            <Package2 className='h-6 w-6' />
-            <span className=''>Gestion Tareas</span>
+    <div className="hidden md:block bg-gradient-to-tl from-blue-200 via-gray-200 to-purple-200 border-r h-screen sticky top-0">
+      <div className="flex flex-col h-full p-6">
+        
+        {/* Título o nombre de la app */}
+        <div className="flex items-center gap-2 font-semibold text-gray-800 mb-8">
+          <Package2 className="h-8 w-8 text-blue-600" />
+          <span className="text-2xl">Gestión Tareas</span>
+        </div>
+
+        {/* Menú de navegación */}
+        <nav className="flex flex-col gap-4 text-sm font-medium flex-1">
+          <Link
+            href="/"
+            className="flex items-center gap-3 rounded-lg px-4 py-3 text-xl text-gray-700 transition-all hover:bg-blue-200 hover:text-blue-600"
+          >
+            <Home className="h-8 w-8" />
+            Dashboard
           </Link>
-          <Button variant='outline' size='icon' className='ml-auto h-8 w-8'>
-            <Bell className='h-4 w-4' />
-            <span className='sr-only'>Toggle notifications</span>
-          </Button>
-        </div>
-        <div className='flex-1'>
-          <nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
+          
+          <Link
+            href="/projects"
+            className="flex items-center gap-3 rounded-lg px-4 py-3 text-xl text-gray-700 transition-all hover:bg-blue-200 hover:text-blue-600"
+          >
+            <ShoppingCart className="h-8 w-8" />
+            Proyectos
+          </Link>
+
+          <Link
+            href="/tasks"
+            className="flex items-center gap-3 rounded-lg px-4 py-3 text-xl text-gray-700 transition-all hover:bg-blue-200 hover:text-blue-600"
+          >
+            <Package className="h-8 w-8" />
+            Tareas
+          </Link>
+
+          {/* Solo mostrar para roles no 'USER' */}
+          {session?.user?.role !== 'USER' && (
             <Link
-              href='/'
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
+              href="/users"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-xl text-gray-700 transition-all hover:bg-blue-200 hover:text-blue-600"
             >
-              <Home className='h-4 w-4' />
-              Dashboard
+              <LineChart className="h-8 w-8" />
+              Usuarios
             </Link>
-            <Link
-              href='/projects'
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-            >
-              <ShoppingCart className='h-4 w-4' />
-              Proyectos
-            </Link>
-            <Link
-              href='/tasks'
-              className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-            >
-              <Package className='h-4 w-4' />
-              Tareas{' '}
-            </Link>
-            {/* Mostrar el enlace de Usuarios solo si el rol no es USER */}
-            {session?.user?.role !== 'USER' && (
-              <Link
-                href='/users'
-                className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
-              >
-                <LineChart className='h-4 w-4' />
-                Usuarios
-              </Link>
-            )}
-          </nav>
-        </div>
-        <div className='mt-auto p-4'>
-          <Card x-chunk='dashboard-02-chunk-0'>
-            <CardHeader className='p-2 pt-0 md:p-4 flex flex-row gap-5 justify-center items-center'>
-              <Avatar>
-                <AvatarImage src={session?.user?.image} alt='@shadcn' />
-              </Avatar>
-              <div className='flex flex-col items-center justify-center'>
-                <CardTitle>{session?.user?.name}</CardTitle>
-                <CardContent className='p-2 pt-0 md:p-4 md:pt-0'>{session?.user?.role}</CardContent>
-              </div>
-            </CardHeader>
-          </Card>
+          )}
+
+          {/* Separador visual */}
+          <hr className="my-6 border-gray-300" />
+
+          {/* Sección de Accesos Rápidos o Atajos */}
+          <div className="text-xs text-gray-500 font-semibold uppercase">Atajos</div>
+        </nav>
+
+        {/* Perfil del usuario */}
+        <div className="p-4">
+          <div className="flex items-center gap-4 bg-white shadow-lg rounded-lg p-4">
+            <Avatar>
+              <AvatarImage src={session?.user?.image} alt="User Avatar" />
+            </Avatar>
+            <div className="flex flex-col items-start">
+              <span className="font-semibold text-lg">{session?.user?.name}</span>
+              <span className="text-sm text-gray-600">{session?.user?.role}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Index;
+export default Sidebar;
