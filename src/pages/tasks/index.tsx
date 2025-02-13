@@ -1,156 +1,126 @@
-import { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const Tasks = ({ session }) => {
-  const [tasks, setTasks] = useState([]);
-  const [taskToEdit, setTaskToEdit] = useState(null);
-  const [newTask, setNewTask] = useState({ title: "", description: "" });
+interface Project {
+  id: string;
+  name: string;
+}
+
+interface Task {
+  id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
+  projectId: string;
+}
+
+export default function TasksPage() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<string>('');
+  const [newTask, setNewTask] = useState<{ title: string; description: string; completed: boolean }>({
+    title: '',
+    description: '',
+    completed: false,
+  });
 
   useEffect(() => {
-    fetchTasks();
+    fetchProjects();
   }, []);
 
-  const fetchTasks = async () => {
-    const res = await fetch("/api/tasks");
-    const data = await res.json();
-    setTasks(data);
+  useEffect(() => {
+    if (selectedProject) {
+      fetchTasks(selectedProject);
+    }
+  }, [selectedProject]);
+
+  const fetchTasks = async (projectId: string) => {
+    try {
+      const response = await axios.get(`/api/tasks?projectId=${projectId}`);
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      const response = await axios.get('/api/projects');
+      setProjects(response.data);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    }
   };
 
   const handleCreateTask = async () => {
-    if (!newTask.title || !newTask.description) return;
-
-    const res = await fetch("/api/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newTask),
-    });
-
-    if (res.ok) {
-      fetchTasks();
-      setNewTask({ title: "", description: "" });
+    if (!selectedProject || !newTask.title.trim()) {
+      alert('Please select a project and provide a title');
+      return;
+    }
+  
+    try {
+      const response = await axios.post('/api/tasks', {
+        title: newTask.title,
+        description: newTask.description,
+        completed: newTask.completed,
+        projectId: selectedProject,
+      });
+  
+      setTasks((prevTasks) => [...prevTasks, response.data]); // Agregar la nueva tarea a la lista
+      setNewTask({ title: '', description: '', completed: false });
+    } catch (error) {
+      console.error('Error creating task:', error);
     }
   };
-
-  const handleEditTask = async () => {
-    if (!taskToEdit?.title || !taskToEdit?.description) return;
-
-    const res = await fetch("/api/tasks", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(taskToEdit),
-    });
-
-    if (res.ok) {
-      fetchTasks();
-      setTaskToEdit(null);
-    }
-  };
-
-  const handleDeleteTask = async (id) => {
-    const res = await fetch("/api/tasks", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-
-    if (res.ok) {
-      fetchTasks();
-    }
-  };
-
+  
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Tareas</h1>
-
-      {/* Crear Tarea (Solo para ADMIN) */}
-     
-        <div className="mt-4">
-          <input
-            type="text"
-            placeholder="Título de la Tarea"
-            value={newTask.title}
-            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-            className="border p-2 mr-2"
-          />
-          <input
-            type="text"
-            placeholder="Descripción"
-            value={newTask.description}
-            onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-            className="border p-2 mr-2"
-          />
-          <button onClick={handleCreateTask} className="bg-blue-500 text-white px-4 py-2">
-            Crear Tarea
-          </button>
-        </div>
-      
-      {/* Modal de edición */}
-      {taskToEdit && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-lg font-bold">Editar Tarea</h2>
-            <input
-              type="text"
-              value={taskToEdit.title}
-              onChange={(e) => setTaskToEdit({ ...taskToEdit, title: e.target.value })}
-              className="border p-2 w-full my-2"
-            />
-            <input
-              type="text"
-              value={taskToEdit.description}
-              onChange={(e) => setTaskToEdit({ ...taskToEdit, description: e.target.value })}
-              className="border p-2 w-full my-2"
-            />
-            <button onClick={handleEditTask} className="bg-green-500 text-white px-4 py-2 mr-2">
-              Guardar
-            </button>
-            <button onClick={() => setTaskToEdit(null)} className="bg-gray-500 text-white px-4 py-2">
-              Cancelar
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Lista de Tareas */}
-      <table className="w-full mt-4 border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">ID</th>
-            <th className="p-2">Título</th>
-            <th className="p-2">Descripción</th>
-            <th className="p-2">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks.map((task) => (
-            <tr key={task.id} className="border-t">
-              <td className="p-2">{task.id}</td>
-              <td className="p-2">{task.title}</td>
-              <td className="p-2">{task.description}</td>
-              <td className="p-2">
-                {session.user.role === "ADMIN" && (
-                  <>
-                    <button
-                      onClick={() => setTaskToEdit(task)}
-                      className="bg-yellow-500 text-white px-4 py-2 mr-2"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleDeleteTask(task.id)}
-                      className="bg-red-500 text-white px-4 py-2"
-                    >
-                      Eliminar
-                    </button>
-                  </>
-                )}
-              </td>
-            </tr>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Tasks</h1>
+      <div className="mb-4">
+        <label className="block text-gray-700">Select a project:</label>
+        <select
+          className="border p-2 w-full"
+          value={selectedProject}
+          onChange={(e) => setSelectedProject(e.target.value)}
+        >
+          <option value="">Choose a project</option>
+          {projects.map((project: Project) => (
+            <option key={project.id} value={project.id}>
+              {project.name}
+            </option>
           ))}
-        </tbody>
-      </table>
+        </select>
+      </div>
+      <div className="mb-4">
+        <input
+          className="border p-2 w-full"
+          type="text"
+          placeholder="Task Title"
+          value={newTask.title}
+          onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+        />
+      </div>
+      <div className="mb-4">
+        <input
+          className="border p-2 w-full"
+          type="text"
+          placeholder="Task Description"
+          value={newTask.description}
+          onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+        />
+      </div>
+      <button className="bg-blue-500 text-white p-2 rounded w-full" onClick={handleCreateTask}>
+        Create Task
+      </button>
+      <ul className="mt-6">
+        {tasks.map((task: Task) => (
+          <li key={task.id} className="border-b p-2 flex justify-between">
+            <span>
+              {task.title} - {task.completed ? '✅' : '⏳'}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-};
-
-export default Tasks;
+}
