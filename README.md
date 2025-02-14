@@ -1,78 +1,139 @@
-# Descripción del Proyecto
+# Documentación del Proyecto - Gestión de Tareas
 
-El proyecto Gestión de Tareas es una aplicación web diseñada para facilitar la organización y seguimiento de tareas dentro de proyectos. A través de esta plataforma, los usuarios pueden crear proyectos, asignar tareas, marcar su progreso y colaborar con otros miembros del equipo.
+## Descripción del Proyecto
+El proyecto **Gestión de Tareas** es una aplicación web diseñada para facilitar la organización y seguimiento de tareas dentro de proyectos. A través de esta plataforma, los usuarios pueden **crear proyectos, asignar tareas, marcar su progreso y colaborar** con otros miembros del equipo.
 
-El sistema está dividido en dos roles principales: Administrador y Usuario Regular. El Administrador tiene acceso completo para gestionar proyectos, usuarios y tareas, mientras que el Usuario Regular tiene la capacidad de gestionar y completar tareas dentro de los proyectos a los que está asignado.
+El sistema define dos roles principales:
+- **Administrador (ADMIN)**: Puede gestionar proyectos, tareas y usuarios.
+- **Usuario Regular (USER)**: Puede gestionar y completar tareas dentro de los proyectos asignados.
 
-El proyecto se construye utilizando tecnologías modernas como Next.js para el frontend, Prisma para la gestión de la base de datos, y GraphQL para la interacción con la API. Además, la autenticación se maneja a través de NextAuth.js para asegurar una experiencia de usuario fluida y segura.
+El proyecto está construido con tecnologías modernas:
+- **Next.js** para el frontend.
+- **Prisma** para la gestión de la base de datos.
+- **GraphQL** para la comunicación eficiente entre frontend y backend.
+- **NextAuth.js** para autenticación de usuarios.
 
+---
 ## Funcionalidades Principales
 
-###Gestión de Usuarios
+### 1. Gestión de Usuarios
+- Los administradores pueden **crear, editar y eliminar usuarios**.
+- Los usuarios pueden **actualizar su perfil**, pero no gestionar otros usuarios.
 
-- Administradores pueden crear, editar y eliminar usuarios.
-- Usuarios pueden actualizar sus perfiles, pero no pueden gestionar otros usuarios.
+### 2. Gestión de Proyectos
+- Los administradores pueden **crear, editar y eliminar proyectos**.
+- Los usuarios pueden **ver los proyectos** a los que están asignados y **seguir el progreso de sus tareas**.
 
-###Gestión de Proyectos
+### 3. Gestión de Tareas
+- Los administradores pueden **asignar tareas a usuarios**, establecer fechas de vencimiento y marcarlas como completadas.
+- Los usuarios pueden **ver las tareas asignadas, marcarlas como completadas y agregar comentarios**.
 
-- Administradores pueden crear, editar y eliminar proyectos.
-- Usuarios pueden ver los proyectos a los que están asignados y seguir el progreso de las tareas.
+### 4. Autenticación de Usuarios
+- Implementación de **inicio de sesión con NextAuth.js**.
+- Los roles de usuario (**ADMIN o USER**) se asignan al momento de la creación de la cuenta.
 
-###Gestión de Tareas
+### 5. Interfaz de Usuario
+- **Diseño limpio y funcional** con React y TailwindCSS.
+- **Dashboard intuitivo** para visualizar proyectos, tareas y usuarios.
 
-- Administradores pueden asignar tareas a usuarios, establecer fechas de vencimiento y marcar tareas como completadas.
-- Usuarios pueden ver las tareas asignadas, marcarlas como completadas y agregar comentarios.
+### 6. API GraphQL
+- Uso de **GraphQL** para realizar operaciones CRUD en proyectos, usuarios y tareas.
+- **Apollo Server** gestionando consultas y mutaciones de GraphQL.
 
-###Autenticación de Usuarios
+### 7. Seguridad
+- **Roles diferenciados** para evitar accesos indebidos.
+- **Autenticación segura** con NextAuth.js.
 
-- Implementación de inicio de sesión y autenticación con NextAuth.js.
-- Los roles de usuario se asignan al momento de la creación de la cuenta (Administrador o Usuario Regular).
+---
+## Tecnologías Usadas
 
-###Interfaz de Usuario
+### Backend
+- **Node.js**: Entorno de ejecución para el servidor.
+- **Next.js**: Framework para React con soporte SSR y API Routes.
+- **Apollo Server**: Implementación de GraphQL.
+- **GraphQL**: Lenguaje de consulta para la API.
+- **Prisma**: ORM para la base de datos.
+- **Supabase**: Base de datos y autenticación.
 
-- Diseño limpio y funcional utilizando React y TailwindCSS.
-- Dashboard para visualizar proyectos, tareas y usuarios de manera rápida y eficiente.
+### Frontend
+- **React**: Biblioteca para construir interfaces de usuario.
+- **TailwindCSS**: Framework de CSS para diseño rápido y responsivo.
+- **NextAuth.js**: Autenticación de usuarios con soporte de roles.
 
-###API GraphQL
-- Uso de GraphQL para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en los proyectos, usuarios y tareas.
-- Apollo Server gestionando las consultas y mutaciones de GraphQL.
+### Otras herramientas
+- **GitHub**: Control de versiones.
+- **Vercel**: Despliegue continuo.
 
-###Seguridad
-- Roles diferenciados para Administradores y Usuarios, asegurando que solo los administradores puedan realizar ciertas acciones como la gestión de usuarios y proyectos.
+---
+## Diagrama de Arquitectura
 
+![{42CD7524-8B76-4C99-8FC3-DCB242F1DB7D}](https://github.com/user-attachments/assets/47e66a7e-070d-43f4-a244-0cc5e85f97dc)
 
-# Tecnologías Usadas
+---
+## Usuarios de Prueba
 
-##Backend
-
-- Node.js: Entorno de ejecución para el servidor.
-- Next.js: Framework para React, utilizado para construir la aplicación de servidor y cliente.
-- Apollo Server: Para la implementación de GraphQL, gestionando consultas y mutaciones en la base de datos.
-- GraphQL: Lenguaje de consulta para la API, utilizado para realizar operaciones CRUD sobre proyectos, usuarios y tareas.
-- Prisma: ORM para interactuar con la base de datos y gestionar modelos de datos.
-- Supabase: Base de datos backend y servicios de autenticación para usuarios.
-
-##Frontend
-
-- React: Biblioteca de JavaScript para construir interfaces de usuario dinámicas.
-- TailwindCSS: Framework de CSS para diseñar interfaces de usuario con un enfoque en la productividad y diseño responsivo.
-- NextAuth.js: Librería para la autenticación de usuarios, con soporte para roles como ADMIN y USER.
-
-##Otras herramientas
-
-- GitHub: Control de versiones y colaboración en el proyecto.
-- Vercel: Plataforma para el despliegue continuo de la aplicación web.
-
-
-
-# Usuarios
 ### Usuario ADMIN
-Email: admin@gmail.com
-Password: Admin123*
+- **Email**: admin@gmail.com
+- **Contraseña**: Admin123*
 
 ### Usuario USER
-Email: user@gmail.com
-Password: User123*
+- **Email**: user@gmail.com
+- **Contraseña**: User123*
+
+---
+## Estructura del Proyecto
+
+```
+/sebastian-castellanos-gestion-tareas
+│── /src
+│   │── /components      # Componentes reutilizables
+│   │── /pages           # Páginas de la aplicación
+│   │── /api             # API Routes para GraphQL
+│   │── /lib             # Configuraciones auxiliares (auth, db, utils)
+│── /prisma              # Esquema y migraciones de la base de datos
+│── .env                 # Variables de entorno
+│── package.json         # Dependencias y scripts
+```
+
+---
+## Despliegue y Configuración
+1. **Clonar el repositorio**
+   ```sh
+   git clone https://github.com/20242-Ingenieria-Web-Udea-MJ/Sebastian-Castellanos-Gestion-Tareas.git
+   cd Sebastian-Castellanos-Gestion-Tareas
+   ```
+
+2. **Instalar dependencias**
+   ```sh
+   npm install
+   ```
+
+3. **Configurar variables de entorno**
+   Crear un archivo `.env` en la raíz con:
+   ```env
+   DATABASE_URL=postgresql://usuario:contraseña@host:puerto/db
+   NEXTAUTH_SECRET=supersecreto
+   NEXT_PUBLIC_API_URL=http://localhost:3000
+   ```
+
+4. **Ejecutar migraciones**
+   ```sh
+   npx prisma migrate dev --name init
+   ```
+
+5. **Ejecutar el servidor**
+   ```sh
+   npm run dev
+   ```
+
+6. **Abrir en el navegador**
+   ```
+   http://localhost:3000
+   ```
+
+---
+## Conclusiones
+Esta aplicación permite la gestión eficiente de tareas en proyectos colaborativos. Con una arquitectura modular y tecnólogas modernas, ofrece escalabilidad, seguridad y facilidad de uso.
 
 
 
